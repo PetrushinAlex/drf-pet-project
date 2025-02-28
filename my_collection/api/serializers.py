@@ -1,3 +1,7 @@
+from django.contrib.auth.tokens import default_token_generator
+from django.contrib.auth.validators import UnicodeUsernameValidator
+from django.shortcuts import get_object_or_404
+
 from rest_framework import serializers
 from rest_framework.relations import SlugRelatedField
 from rest_framework.validators import UniqueTogetherValidator
@@ -42,6 +46,30 @@ class SignUpSerializer(serializers.Serializer):
 
         if error_msg:
             raise ValidationError(error_msg)
+
+        return data
+
+
+class AuthTokenSerializer(serializers.Serializer):
+    username = serializers.CharField(
+        max_length=100,
+        required=True,
+        allow_blank=False,
+        validators=(UnicodeUsernameValidator(),),
+    )
+    confirmation_code = serializers.CharField(
+        required=True,
+        allow_blank=False
+    )
+
+    def validate(self, data):
+        username = data.get('username')
+        confirmation_code = data.get('confirmation_code')
+
+        user = get_object_or_404(CustomUser, username=username)
+
+        if not default_token_generator.check_token(user, confirmation_code):
+            raise ValidationError({'token': 'Неверный код подтверждения.'})
 
         return data
 
