@@ -12,3 +12,15 @@
 This project aims to gain additional and sometimes bitter experience working with drf.
 
 The project is an api for telling about the studied works of art (games, movies, books).
+
+
+## Установка <a id=setup></a>
+
+1. Клонируйте репозиторий на свой компьютер:
+
+    ```bash
+    git clone git@github.com:PetrushinAlex/drf-pet-project.git
+    ```
+    ```bash
+    cd my_collection
+    ```
